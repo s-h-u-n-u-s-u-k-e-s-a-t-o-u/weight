@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+
+    <?!= HtmlService.createHtmlOutputFromFile("css").getContent(); ?>
+
+</head>
+
+<body>
+
+  <div class="container title-container">
+    <h1>ユーザー登録</h1>
+  </div>
+
+  <form class="h-adr" name="user">
+
+
+    <div class="container">
+      <div class="title">日付</div>
+      <div class="margin-top"><input name="日付" type="date" name="birthday"></div>
+    </div>
+
+
+    <div class="container">
+      <div class="title">重さ</div>
+      <div class="margin-top"><input name="重さ" type="number" placeholder="nn.n"></div>
+    </div>
+
+
+    <div class="button-container">
+      <button onclick="registerUser();" type="button">送信</button>
+    </div>
+
+  </form>
+
+  <script>
+    function registerUser() {
+
+        const form = document.forms["user"];
+
+        const body = document.querySelector("body");
+        const text =
+          `<div class="overlay">` +
+          `  <div class="loader-outer">` +
+          `    <div class="loader"></div>` +
+          `  </div>` +
+          `</div>`;
+        body.insertAdjacentHTML("beforeend", text);
+
+        google.script.run.withSuccessHandler(onSuccess)
+                       .withFailureHandler(onFailure)
+                       .registerUser(form);
+
+        function onSuccess() {
+          window.top.location.href = "<?= url ?>/success";
+        }
+
+        function onFailure() {
+          const overlay = document.querySelector(".overlay");
+          const dialogHtml =
+            `<div class="dialog">` +
+            `  <div class="margin-top">サーバーエラーが発生しました。<br>再度送信ボタンを押してください。</div>` +
+            `  <button onclick="closeDialog();">閉じる</button>` +
+            `</div>`;
+          overlay.insertAdjacentHTML("beforeend", dialogHtml);
+        }
+
+      }
+
+      function closeDialog() {
+        document.querySelector(".overlay").remove();
+      }
+
+  </script>
+
+</body>
+
+</html>
