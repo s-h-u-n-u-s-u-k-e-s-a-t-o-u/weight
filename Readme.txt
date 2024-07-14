@@ -1,1 +1,1 @@
-����t�@�C��
+GasのWebアプリケーション機能を使って、Google Spreadsheetにレコードを追加する。
